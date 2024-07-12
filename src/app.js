@@ -13,6 +13,9 @@ app.use(cors({
             return cb(null, true);
         }
         logger.info("API Call Origin :" + origin);
+	logger.info('env: '+ process.env.ALLOWED_DOMAINS);    
+	logger.info('split: '+process.env.ALLOWED_DOMAINS.split(','));
+	logger.info('env: '+ process.env.ALLOWED_DOMAINS.split(',').indexOf(origin));
         if (process.env.ALLOWED_DOMAINS.split(',').indexOf(origin) === -1) {
             logger.info("Not allowed dodmain - " + origin);
             var msg = `This site ${origin} does not have an access. Only specific domains are allowed to access it.`;

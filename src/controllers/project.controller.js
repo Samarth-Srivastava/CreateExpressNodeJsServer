@@ -23,7 +23,7 @@ function createProject(req, res) {
              logger.info('child process exited with ' +
                         `code ${code} and signal ${signal}`);
 
-                        const data = fs.readFileSync('/Projects/NodeJs/'+ folderName + '.zip');
+                        const data = fs.readFileSync(`${process.env.TEMP_FILE_PATH}/`+ folderName + '.zip');
 
                         res.set('Content-Type','application/octet-stream');
                         res.set('Content-Disposition',`attachment; filename=${zipFileName}`);
