@@ -39,6 +39,7 @@ then
         sed -i $'7 i \\\t\\\t"start": "nodemon index.js",' package.json
 
         rm -rf node_modules/
+        rm -rf package-lock.json
         cd ..
         zip -r $folderName.zip $folderName -x $folderName/package-lock.json
         rm -rf $folderName

@@ -1,10 +1,11 @@
 import logger from '../utils/logger.js';
 import { exec } from 'node:child_process';
-import path from 'node:path';
+import fs from 'node:fs';
 
 function createProject(req, res) {
     try{
         const folderName = req.query.folderName;
+        const zipFileName =  folderName+'.zip';
         let statusCode = 200;
         let d = {}
         const myShellScript = exec(`sh ${process.env.SH_FILE_PATH}/createProject.sh ${folderName} ${process.env.TEMP_FILE_PATH}`);
@@ -21,8 +22,26 @@ function createProject(req, res) {
         myShellScript.on('exit', function (code, signal) {
              logger.info('child process exited with ' +
                         `code ${code} and signal ${signal}`);
-                        res.set("Content-Disposition", 'attachment; filename='+folderName+'.zip');
-                        res.sendFile('/Projects/NodeJs/'+ folderName + '.zip');
+
+                        const data = fs.readFileSync('/Projects/NodeJs/'+ folderName + '.zip');
+
+                        res.set('Content-Type','application/octet-stream');
+                        res.set('Content-Disposition',`attachment; filename=${zipFileName}`);
+                        res.set('Content-Length',data.length);
+                        res.send(data);
+                        //res.sendFile('/Projects/NodeJs/'+ folderName + '.zip');
+
+                    // const zip = new AdmZip();
+                    // zip.addFile(`/e/Projects/NodeJs/lknkjnknb/.env`);
+
+                    // zip.writeZip('/Projects/NodeJs/qwerty.zip');
+
+                    // const data = zip.toBuffer();
+
+                    // res.set('Content-Type','application/octet-stream');
+                    // res.set('Content-Disposition',`attachment; filename=${zipFileName}`);
+                    // res.set('Content-Length',data.length);
+                    // res.send(data);
           });
         
     }
